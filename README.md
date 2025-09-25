@@ -39,21 +39,13 @@ No unauthorised software was installed on the Council laptop — only the Raspbe
 - Modular design: easy to extend with extra servos or attachments
 
 
-5. Repository Contents (Planned)
-- `arm_bridge.py` → MQTT ↔ USB serial bridge
-- `cmd_main.py` → MicroPython script on ESP32 to parse servo commands
-- `key_bridge.py` → Higher-level script for mapping keystrokes
-- `tap_test.py` → Calibration helper for servo positioning
-- `docs/` → Project report sections, diagrams, and design notes
-
-
-6. Future Work
+5. Future Work
 - Calibration of all keys for full keyboard typing.
 - Better stylus attachment for pressing diagonal keys.
 - Integration with remote desktop workflows.
 - Recording & replaying typed sequences.
 
 
-7. Author
+6. Author
 **Vlad Boureanu**
 Final Year Project – Secure Remote Interaction via Robotic Arm
