@@ -39,13 +39,20 @@ No unauthorised software was installed on the Council laptop — only the Raspbe
 - Modular design: easy to extend with extra servos or attachments
 
 
-5. Future Work
+5. Repository Structure
+- `press_demo.py` → One full press cycle (open clamp, move down, press, release).
+- `clamp_open.py` → Opens the clamp.
+- `clamp_close.py` → Closes the clamp.
+- `ctrl_alt_test.py` → Demonstrates repeated clamp motion (basis for typing Ctrl/Alt keys).
+
+  
+6. Future Work
 - Calibration of all keys for full keyboard typing.
 - Better stylus attachment for pressing diagonal keys.
 - Integration with remote desktop workflows.
 - Recording & replaying typed sequences.
 
 
-6. Author
+7. Author
 **Vlad Boureanu**
 Final Year Project – Secure Remote Interaction via Robotic Arm
