@@ -1,0 +1,92 @@
+# type_demo.py
+# Run: python3 type_demo.py
+# It resets to neutral, types SEQUENCE, and exits. No prompts.
+
+import serial, time
+
+SERIAL_PORT = "/dev/ttyUSB0"
+BAUD = 115200
+
+# Your upright neutral posture
+NEUTRAL = {1:700, 2:500, 3:500, 4:500, 5:500, 6:480}
+
+# Global timings (ms)
+MOVE_TIME  = 550
+PRESS_TIME = 1050
+PAUSE      = 0.25   # extra settle time after each move
+
+# Change this to whatever you want typed (must be mapped below)
+SEQUENCE = "j80C"    # e.g. "j8e", "je8", etc.
+
+def send(ser, sid, pos, t):
+    ser.write(f"servo {sid} {pos} {t}\r".encode())
+    time.sleep(t/1000 + PAUSE)
+
+def reset_to_neutral(ser):
+    for sid, pos in NEUTRAL.items():
+        send(ser, sid, pos, MOVE_TIME)
+
+# KEYMAP: each step is (servo_id, position, time_ms)
+# Pattern: position with 2/3/5/6 → press with 4 → lift 4 → (optionally) return 2/3/5/6
+KEYMAP = {
+    "j": [
+        (6, 450, MOVE_TIME),
+        (3, 350, MOVE_TIME),
+        (4, 700, MOVE_TIME),   # hover height before press
+        (4, 955, PRESS_TIME),  # press down
+        (4, 700, MOVE_TIME),   # lift up
+    ],
+
+    "8": [
+        (6, 545, MOVE_TIME),
+        (5, 450, MOVE_TIME),
+        (3, 380, MOVE_TIME),
+        (4, 935, 950),         # press down
+        (4, 700, MOVE_TIME),   # lift up
+    ],
+
+    "e": [
+        (6, 455, MOVE_TIME),
+        (5, 435, MOVE_TIME),
+        (3, 430, MOVE_TIME),
+        (4, 955, 900),         # press down
+        (4, 700, MOVE_TIME),   # lift up
+    ],
+
+    "0": [
+	(6, 420, MOVE_TIME),
+	(5, 420, MOVE_TIME),
+	(3, 430, MOVE_TIME),
+	(4, 955, 900),
+	(4, 700, MOVE_TIME),
+    ],
+
+    "C": [
+	(6, 650, MOVE_TIME),
+	(5, 500, MOVE_TIME),
+	(3, 500, MOVE_TIME),
+	(4, 955, PRESS_TIME),
+	(4, 700, MOVE_TIME),
+     ],
+}
+
+def main():
+    ser = serial.Serial(SERIAL_PORT, BAUD, timeout=1)
+    time.sleep(0.2)
+
+    reset_to_neutral(ser)
+
+    for ch in SEQUENCE.lower():
+        if ch in KEYMAP:
+            for sid, pos, t in KEYMAP[ch]:
+                send(ser, sid, pos, t)
+        else:
+            # unmapped char -> small pause (acts like a space)
+            time.sleep(0.6)
+
+    reset_to_neutral(ser)
+    ser.close()
+
+if __name__ == "__main__":
+    main()
+
